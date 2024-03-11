@@ -13,28 +13,24 @@ import "vanilla-calendar-pro/build/vanilla-calendar.min.css";
 <script>
   import VanillaCalendar from "vanilla-calendar-pro";
 
-  if (typeof Telegram !== "undefined") {
-    setupButtonHandler();
-  } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    document.documentElement.setAttribute("data-theme", "dark");
-  }
+  document.documentElement.setAttribute(
+    "data-theme",
+    Telegram.WebApp.colorScheme
+  );
 
   const searchParams = new URLSearchParams(window.location.search);
-  const calendarOptionsString = searchParams.get("options") || "{}";
+
+  const calendarOptionsString = searchParams.get("cal") || "{}";
   const calendar = new VanillaCalendar(
     "#calendar",
     JSON.parse(calendarOptionsString)
   );
   calendar.init();
 
-  function setupButtonHandler() {
-    document.documentElement.setAttribute(
-      "data-theme",
-      Telegram.WebApp.colorScheme
-    );
-    const requestOptionsString = searchParams.get("requestOptions");
+  (function setupButtonHandler() {
+    const requestOptionsString = searchParams.get("req");
     if (!requestOptionsString) {
-      console.error("requestOptions search param not found");
+      console.error("'req' search param not found");
       return;
     }
     const requestOptions = JSON.parse(requestOptionsString);
@@ -52,5 +48,5 @@ import "vanilla-calendar-pro/build/vanilla-calendar.min.css";
         }),
       });
     });
-  }
+  })();
 </script>
