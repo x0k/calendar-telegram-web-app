@@ -1,0 +1,27 @@
+---
+import "vanilla-calendar-pro/build/vanilla-calendar.min.css";
+---
+
+<div id="calendar"></div>
+
+<button
+  id="continue"
+  class="text-black dark:text-white font-bold py-2 px-4 rounded"
+  >Continue</button
+>
+
+<script>
+  import VanillaCalendar from "vanilla-calendar-pro";
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const optionsString = searchParams.get("options") || "{}";
+  const options = JSON.parse(optionsString);
+  const calendar = new VanillaCalendar("#calendar", options);
+  calendar.init();
+
+  document
+    .getElementById("continue")!
+    .addEventListener("click", () => {
+      console.log(calendar);
+    });
+</script>
