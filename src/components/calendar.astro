@@ -13,15 +13,44 @@ import "vanilla-calendar-pro/build/vanilla-calendar.min.css";
 <script>
   import VanillaCalendar from "vanilla-calendar-pro";
 
+  if (typeof Telegram !== "undefined") {
+    setupButtonHandler();
+  } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+
   const searchParams = new URLSearchParams(window.location.search);
-  const optionsString = searchParams.get("options") || "{}";
-  const options = JSON.parse(optionsString);
-  const calendar = new VanillaCalendar("#calendar", options);
+  const calendarOptionsString = searchParams.get("options") || "{}";
+  const calendar = new VanillaCalendar(
+    "#calendar",
+    JSON.parse(calendarOptionsString)
+  );
   calendar.init();
 
-  document
-    .getElementById("continue")!
-    .addEventListener("click", () => {
-      console.log(calendar);
+  function setupButtonHandler() {
+    document.documentElement.setAttribute(
+      "data-theme",
+      Telegram.WebApp.colorScheme
+    );
+    const requestOptionsString = searchParams.get("requestOptions");
+    if (!requestOptionsString) {
+      console.error("requestOptions search param not found");
+      return;
+    }
+    const requestOptions = JSON.parse(requestOptionsString);
+    document.getElementById("continue")!.addEventListener("click", () => {
+      fetch(requestOptions.url, {
+        method: "POST",
+        ...requestOptions,
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          ...requestOptions.headers,
+        },
+        body: JSON.stringify({
+          calendar,
+          webAppInitialData: Telegram.WebApp.initDataUnsafe,
+        }),
+      });
     });
+  }
 </script>
