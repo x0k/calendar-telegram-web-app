@@ -1,7 +1,7 @@
 #!/usr/bin/bash -xe
 
 d:
-  sudo npm run dev
+  npm run dev
 
 f:
   npx prettier --write .
@@ -14,6 +14,3 @@ b:
 
 p:
   npx astro preview
-
-cert:
-  mkdir -p .cert && mkcert -key-file ./.cert/localhost-key.pem -cert-file ./.cert/localhost.pem 'calendar-telegram-web-app.local'
