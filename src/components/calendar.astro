@@ -6,7 +6,7 @@ import "vanilla-calendar-pro/build/vanilla-calendar.min.css";
 
 <button
   id="continue"
-  class="text-black dark:text-white font-bold py-2 px-4 rounded"
+  class="bg-tg-btn-color text-tg-btn-txt font-bold py-2 px-4 rounded"
   >Continue</button
 >
 
@@ -20,33 +20,66 @@ import "vanilla-calendar-pro/build/vanilla-calendar.min.css";
 
   const searchParams = new URLSearchParams(window.location.search);
 
-  const calendarOptionsString = searchParams.get("cal") || "{}";
-  const calendar = new VanillaCalendar(
-    "#calendar",
-    JSON.parse(calendarOptionsString)
-  );
+  const calendarOptions = JSON.parse(searchParams.get("cal") || "{}");
+  const calendar = new VanillaCalendar("#calendar", {
+    ...calendarOptions,
+    settings: {
+      lang: Telegram.WebApp.initDataUnsafe.user?.language_code,
+      ...calendarOptions.settings,
+      visibility: {
+        theme: Telegram.WebApp.colorScheme,
+        ...calendarOptions.settings?.visibility,
+      },
+    },
+  });
   calendar.init();
 
-  (function setupButtonHandler() {
-    const requestOptionsString = searchParams.get("req");
-    if (!requestOptionsString) {
-      console.error("'req' search param not found");
-      return;
-    }
+  const btn = document.getElementById("continue")!;
+  btn.innerText = Telegram.WebApp.MainButton.text;
+
+  const requestOptionsString = searchParams.get("req");
+  if (requestOptionsString) {
+    const stateString = searchParams.get("state") || undefined;
     const requestOptions = JSON.parse(requestOptionsString);
-    document.getElementById("continue")!.addEventListener("click", () => {
-      fetch(requestOptions.url, {
-        method: "POST",
-        ...requestOptions,
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-          ...requestOptions.headers,
+    btn.addEventListener("click", () => {
+      const data = JSON.stringify({
+        calendar: {
+          currentType: calendar.currentType,
+          dateMin: calendar.dateMin,
+          dateMax: calendar.dateMax,
+          rangeMin: calendar.rangeMin,
+          rangeMax: calendar.rangeMax,
+          rangeDisabled: calendar.rangeDisabled,
+          rangeEnabled: calendar.rangeEnabled,
+          selectedDates: calendar.selectedDates,
+          selectedHolidays: calendar.selectedHolidays,
+          selectedMonth: calendar.selectedMonth,
+          selectedYear: calendar.selectedYear,
+          selectedHours: calendar.selectedHours,
+          selectedMinutes: calendar.selectedMinutes,
+          selectedKeeping: calendar.selectedKeeping,
+          selectedTime: calendar.selectedTime,
+          correctMonths: calendar.correctMonths,
+          viewYear: calendar.viewYear,
         },
-        body: JSON.stringify({
-          calendar,
-          webAppInitialData: Telegram.WebApp.initDataUnsafe,
-        }),
+        webAppInitData: Telegram.WebApp.initData,
+        state: stateString,
       });
+      if (requestOptions.url) {
+        fetch(requestOptions.url, {
+          method: "POST",
+          ...requestOptions,
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            ...requestOptions.headers,
+          },
+          body: data,
+        });
+      } else {
+        Telegram.WebApp.sendData(data);
+      }
     });
-  })();
+  } else {
+    alert("Request options not found");
+  }
 </script>

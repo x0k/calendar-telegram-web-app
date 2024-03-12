@@ -5,12 +5,11 @@ interface Props {
 
 const { title } = Astro.props;
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Telegram web app date picker" />
+    <meta name="description" content="Telegram web inputs" />
     <meta name="viewport" content="width=device-width" />
     <link
       rel="icon"
@@ -19,9 +18,10 @@ const { title } = Astro.props;
     />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <script is:inline src=`${import.meta.env.BASE_URL}/telegram-web-app.js`}></script>
+    <script is:inline src={`${import.meta.env.BASE_URL}/telegram-web-app.js`}
+    ></script>
   </head>
-  <body>
+  <body class="min-h-tg-viewport bg-tg-bg">
     <slot />
   </body>
 </html>

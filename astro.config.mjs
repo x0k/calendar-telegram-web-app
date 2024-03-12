@@ -6,5 +6,5 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   integrations: [tailwind()],
   site: "https://x0k.github.io",
-  base: "/calendar-telegram-web-app",
+  base: "/telegram-web-inputs",
 });
