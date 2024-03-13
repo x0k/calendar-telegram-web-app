@@ -14,3 +14,37 @@ b:
 
 p:
   npx astro preview
+
+
+# https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309
+certs:
+  dir=.certs
+  root=$dir/rootCA
+  domain=telegram-web-inputs.local
+  dd=$dir/$domain
+  org=MyOrg
+  mkdir -p $dir
+  # Root Key
+  openssl genrsa -out $root.key 4096
+  # Create and self sign the Root Certificate
+  openssl req -x509 -new -nodes -key $root.key -sha256 -days 1024 -out $root.crt
+  # Cert key
+  openssl genrsa -out $dd.key 2048
+  # Create the signing (csr)
+  openssl req -new -sha256 \
+    -key $dd.key \
+    -subj "/C=US/ST=CA/O=MyOrg, Inc./CN=$domain" \
+    -out $dd.csr
+  # Verify the csr's content
+  openssl req -in $dd.csr -noout -text
+  # Create the cert
+  openssl x509 -req -in $dd.csr \
+    -CA $root.crt \
+    -CAkey $root.key \
+    -CAcreateserial \
+    -out $dd.crt \
+    -days 500 -sha256
+  # Verify the cert
+  openssl x509 -in $dd.crt -noout -text
+  # Verify the chain
+  openssl verify -CAfile $root.crt $dd.crt
