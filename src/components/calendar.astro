@@ -84,8 +84,15 @@ import "vanilla-calendar-pro/build/vanilla-calendar.min.css";
   }
 </script>
 
-<style>
-  .vanilla-calendar {
-    @apply bg-tg-bg text-tg-txt
+<style is:global>
+  [data-calendar-theme="dark"].vanilla-calendar {
+    @apply bg-tg-bg text-tg-txt;
+  }
+
+  [data-calendar-theme="dark"]
+    .vanilla-calendar-day__btn:not(.vanilla-calendar-day__btn_selected),
+  [data-calendar-theme="dark"] .vanilla-calendar-years__year,
+  [data-calendar-theme="dark"] .vanilla-calendar-months__month {
+    @apply bg-tg-bg;
   }
 </style>
