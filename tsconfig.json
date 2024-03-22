@@ -4,5 +4,6 @@
     "typeRoots": [
       "./node_modules/telegram-webapps"
     ]
-  }
+  },
+  "exclude": ["./bot/**"]
 }

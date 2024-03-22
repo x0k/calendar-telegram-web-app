@@ -1,4 +1,4 @@
-#!/usr/bin/bash -xe
+#!/usr/bin/bash -e
 
 d:
   npm run dev
@@ -14,3 +14,10 @@ b:
 
 p:
   npx astro preview
+
+bot:
+  # Required for --env-file
+  echo "Minimal node version: $(cat bot/.nvmrc)"
+  echo "Current node version: $(node --version)"
+  TELEGRAM_BOT_TOKEN=$(cat ~/Sync/tg-web-inputs/telegram-token) \
+    node --env-file=bot/.env.local bot/bot.mjs
