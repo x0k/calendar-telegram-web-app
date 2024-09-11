@@ -3,7 +3,11 @@
   "compilerOptions": {
     "typeRoots": [
       "./node_modules/telegram-webapps"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "exclude": ["./bot/**"]
 }

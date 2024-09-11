@@ -1,10 +1,11 @@
 ---
-import Layout from "../layouts/layout.astro";
+import Root from "../layouts/root.astro";
+import Center from "../layouts/center.astro";
 import CalendarComponent from "../components/calendar.astro";
 ---
 
-<Layout title="Calendar">
-  <main class="p-2 flex flex-col gap-2 justify-center items-center h-full">
+<Root title="Calendar">
+  <Center>
     <CalendarComponent />
-  </main>
-</Layout>
+  </Center>
+</Root>

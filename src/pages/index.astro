@@ -1,11 +1,12 @@
 ---
-import Layout from '../layouts/layout.astro';
+import Layout from "@/layouts/root.astro";
+import Prose from "@/layouts/prose.astro";
 
-import ReadMe from '../../README.md';
+import ReadMe from "../../README.md";
 ---
 
 <Layout title="Telegram web inputs">
-	<main class="mx-auto w-full p-4 max-w-4xl prose">
-		<ReadMe />
-	</main>
+  <Prose>
+    <ReadMe />
+  </Prose>
 </Layout>
