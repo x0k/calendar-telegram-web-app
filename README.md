@@ -120,6 +120,12 @@ mux.HandleFunc(fmt.Sprintf("OPTIONS %s", endpointPath), func(w http.ResponseWrit
   w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
   w.WriteHeader(http.StatusOK)
 })
+
+mux.HandleFunc(fmt.Sprintf("POST %s", endpointPath), func(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Access-Control-Allow-Origin", "https://x0k.github.io")
+  w.Header().Set("Vary", "Accept-Encoding, Origin")
+  ...
+})
 ```
 
 ## Development
