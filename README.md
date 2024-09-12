@@ -4,9 +4,9 @@ A collection of configurable web inputs for your Telegram bot.
 
 ## Inputs
 
-| Name | Parameters | Based on |
-| ---  | --- | --- |
-| [Calendar](https://x0k.github.io/telegram-web-inputs/calenar) | [IOptions](https://github.com/uvarov-frontend/vanilla-calendar-pro/blob/629931a96d5b2b07cd2044961ece0d8a35ef657b/package/types.ts#L152) | [vanilla-calendar-pro](https://github.com/uvarov-frontend/vanilla-calendar-pro) |
+| Name | Parameters | Submitted value | Based on |
+| ---  | --- | --- | --- |
+| [Calendar](https://x0k.github.io/telegram-web-inputs/calenar) | [IOptions](https://github.com/uvarov-frontend/vanilla-calendar-pro/blob/629931a96d5b2b07cd2044961ece0d8a35ef657b/package/types.ts#L152) | [Value](https://github.com/uvarov-frontend/vanilla-calendar-pro/blob/629931a96d5b2b07cd2044961ece0d8a35ef657b/docs/en/reference/main/readonly-options.mdx) |[vanilla-calendar-pro](https://github.com/uvarov-frontend/vanilla-calendar-pro) |
 
 ## Interaction scheme
 
@@ -41,10 +41,11 @@ All input elements are customizable through the search query parameters:
 export BOT_TOKEN=<your-bot-token>
 export CHAT_ID=<your-chat-id>
 export HANDLER_URL=<your-handler-url>
-export NOW=$(date +"%Y-%m-%d")
 export URL="https://x0k.github.io/telegram-web-inputs/calendar?$(python3 -c "
 import urllib.parse
 import json
+from datetime import date
+now = date.today().isoformat()
 params = {
   'r': json.dumps({
     'url': '${HANDLER_URL}'
@@ -61,11 +62,11 @@ params = {
   }),
   'w': json.dumps({
     'date': {
-      'min': '${NOW}',
+      'min': now,
     },
     'settings': {
       'selected': {
-        'dates': ['${NOW}']
+        'dates': [now]
       }
     }
   })
@@ -97,7 +98,7 @@ The body of request will be sent in JSON format.
 
 ```typescript
 {
-  /** Submitted input value */
+  /** Submitted value */
   data: unknown
   /** A string with raw data transferred to the Web App, convenient for validating data.
    *  WARNING: Validate data from this field before using it on the bot's server.
@@ -110,7 +111,7 @@ The body of request will be sent in JSON format.
 }
 ```
 
-Don't forget to ALLOW `CORS` on your server.
+Don't forget to allow `CORS` on your server.
 
 ```go
 mux.HandleFunc(fmt.Sprintf("OPTIONS %s", endpointPath), func(w http.ResponseWriter, r *http.Request) {

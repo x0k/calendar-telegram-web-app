@@ -16,9 +16,6 @@ p:
   npx astro preview
 
 bot:
-  # Required for --env-file
-  echo "Minimal node version: $(cat bot/.nvmrc)"
-  echo "Current node version: $(node --version)"
   TELEGRAM_BOT_TOKEN=$(cat ~/Sync/tg-web-inputs/telegram-token) \
     node --env-file=bot/.env.local bot/bot.mjs
 
@@ -26,10 +23,11 @@ t:
   export BOT_TOKEN=$(cat ~/Sync/tg-web-inputs/telegram-token)
   export CHAT_ID=$(cat ~/Sync/tg-web-inputs/chat-id)
   export HANDLER_URL="https://your-bot.com/handler"
-  export NOW=$(date +"%Y-%m-%d")
   export URL="https://x0k.github.io/telegram-web-inputs/calendar?$(python3 -c "
   import urllib.parse
   import json
+  from datetime import date
+  now = date.today().isoformat()
   params = {
     'r': json.dumps({
       'url': '${HANDLER_URL}'
@@ -46,11 +44,11 @@ t:
     }),
     'w': json.dumps({
       'date': {
-        'min': '${NOW}',
+        'min': now,
       },
       'settings': {
         'selected': {
-          'dates': ['${NOW}']
+          'dates': [now]
         }
       }
     })
